@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dinner</title>
+    <link rel="icon" type="image/svg+xml" href="./svg.svg" />
+
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+      }
+
+      * {
+        user-select: none;
+      }
+
+      .container {
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #333;
+        max-width: 700px;
+      }
+
+      button {
+        padding: 10px 20px;
+        margin: 10px;
+        font-size: 18px;
+        cursor: pointer;
+        border: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s;
+        position: absolute;
+      }
+
+      #yesBtn {
+        background-color: #4caf50;
+        color: white;
+        top: calc(50vh + 80px);
+        left: calc(50vw - 200px);
+      }
+
+      #yesBtn:hover {
+        background-color: #45a049;
+        transform: scale(1.1);
+      }
+
+      #noBtn {
+        color: white;
+        padding: 50px;
+        background-color: transparent;
+        top: calc(50vh + 30px);
+        left: calc(50vw + 80px);
+        cursor: default;
+      }
+
+      #noBtn div {
+        background-color: #f44336;
+        padding: 10px 20px;
+        border-radius: 5px;
+      }
+
+      .message {
+        display: none;
+        margin-top: 20px;
+        font-size: 24px;
+        color: #333;
+      }
+
+      .timer {
+        font-size: 24px;
+        color: #333;
+      }
+
+      #note {
+        margin-top: 20px;
+        font-size: 18px;
+        color: white;
+        animation: gradientColorChange 5s linear infinite;
+      }
+
+      @keyframes gradientColorChange {
+        0% {
+          color: #432e69;
+        }
+        25% {
+          color: #f02e2e;
+        }
+        50% {
+          color: #d470f3;
+        }
+        75% {
+          color: #4caf50;
+        }
+        100% {
+          color: #2196f3;
+        }
+      }
+
+      #toast-container {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+      }
+
+      .toast {
+        display: none;
+        min-width: 200px;
+        margin-top: 15px;
+        padding: 10px;
+        text-align: center;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        animation: fadein 0.5s, fadeout 0.5s 4.5s;
+        user-select: none;
+      }
+
+      .t-green {
+        background-color: #76ff4d;
+        color: #000000;
+      }
+
+      .t-red {
+        background-color: #ff4321;
+        color: #ebebeb;
+      }
+      .zoominout {
+        margin-left: 10px;
+        display: inline-block;
+        animation: zoominout 2s infinite;
+        transform: scale(1.5);
+      }
+
+      @keyframes zoominout {
+        0% {
+          transform: scale(1.5);
+        }
+        50% {
+          transform: scale(1);
+        }
+        100% {
+          transform: scale(1.5);
+        }
+      }
+      @keyframes fadein {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeout {
+        from {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        to {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+      }
+      input[type="date"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        outline: none;
+        transition: border-color 0.3s ease;
+      }
+
+      input[type="date"]:focus {
+        border-color: #4caf50;
+      }
+
+      input[type="date"]::before {
+        content: attr(placeholder);
+        color: #aaa;
+        margin-right: 10px;
+      }
+
+      input[type="date"]:focus::before,
+      input[type="date"]:valid::before {
+        content: "";
+      }
+
+      #confirm:hover {
+        transform: scale(1.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toast-container"></div>
+    <div class="container" id="container">
+      <h1 id="H1"></h1>
+      <button
+        id="yesBtn"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        ">
+        Yes
+        <img width="20px" height="20px" src="./svg.svg" alt="" />
+      </button>
+      <button id="noBtn">
+        <div id="noDiv">No</div>
+      </button>
+      <div class="message" id="message">
+        Can't wait for our dinner! <span class="zoominout">💖</span>
+      </div>
+      <div class="timer" id="timer"></div>
+      <div id="note">P.S.: You cannot press "No" 😜</div>
+    </div>
+    <div class="container" id="container2">
+      <h1
+        id="H1"
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          width: 300px;
+          gap: 20px;
+        ">
+        <div>Choose a date</div>
+        <div>
+          <input id="date" type="date" />
+        </div>
+        <div>
+          <button id="confirm" style="position: relative">Next</button>
+        </div>
+      </h1>
+    </div>
+    <script>
+      const mainToast = document.getElementById("toast-container");
+
+      function showToast(message, state, duration) {
+        const toast = document.createElement("div");
+        toast.className = `toast ${
+          !state || state === "success" ? "t-green" : "t-red"
+        }`;
+        toast.innerText = message;
+        mainToast.appendChild(toast);
+        toast.style.display = "block";
+
+        setTimeout(() => {
+          toast.style.display = "none";
+          mainToast.removeChild(toast);
+        }, duration || 1000);
+      }
+
+      function setMinDate() {
+        const dateInput = document.getElementById("date");
+
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, "0"); // Months start at 0!
+        const dd = String(today.getDate()).padStart(2, "0");
+        const minDate = `${yyyy}-${mm}-${dd}`;
+
+        const maxDate = new Date(today);
+        maxDate.setMonth(maxDate.getMonth() + 1);
+        const maxYyyy = maxDate.getFullYear();
+        const maxMm = String(maxDate.getMonth() + 1).padStart(2, "0");
+        const maxDd = String(maxDate.getDate()).padStart(2, "0");
+        const maxDateStr = `${maxYyyy}-${maxMm}-${maxDd}`;
+
+        dateInput.setAttribute("min", minDate);
+        dateInput.setAttribute("max", maxDateStr);
+      }
+
+      function detectDevice() {
+        const userAgent =
+          navigator.userAgent || navigator.vendor || window.opera;
+        if (/android/i.test(userAgent)) {
+          return "Android";
+        }
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+          return "iOS";
+        }
+        if (/Windows NT/.test(userAgent)) {
+          return "Windows PC";
+        }
+        if (/Macintosh/.test(userAgent)) {
+          return "Mac";
+        }
+        if (/Linux/.test(userAgent)) {
+          return "Linux";
+        }
+        return "Unknown";
+      }
+
+      const device = detectDevice();
+      const cont = document.getElementById("container");
+      const cont2 = document.getElementById("container2");
+
+      if (device === "Android" || device === "iOS") {
+        cont.innerHTML = `<h1>Open the page on a laptop or desktop!</h1>`;
+        cont2.style.display = "none";
+      } else {
+        setTime();
+      }
+
+      function setTime() {
+        const date = localStorage.getItem("date");
+        const dateinput = document.getElementById("date");
+        const confirm = document.getElementById("confirm");
+        if (date && JSON.parse(date)) {
+          proceed(JSON.parse(date));
+        } else {
+          cont.style.display = "none";
+          cont2.style.display = "block";
+          setMinDate();
+          confirm.addEventListener("click", () => {
+            if (dateinput.value) {
+              localStorage.setItem("date", JSON.stringify(dateinput.value));
+              location.reload();
+            } else {
+              showToast("Select a date!", "error", 2000);
+            }
+          });
+        }
+      }
+
+      function proceed(date_e) {
+        cont.style.display = "block";
+        cont2.style.display = "none";
+        const d = new Date(date_e);
+
+        function getQueryParameter(name) {
+          const params = new URLSearchParams(window.location.search);
+          return params.get(name);
+        }
+
+        const date = new Date(
+          `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} 20:00`
+        );
+
+        let attempts = 0;
+
+        document.addEventListener("DOMContentLoaded", function () {
+          const yesBtn = document.getElementById("yesBtn");
+          const H1 = document.getElementById("H1");
+          const note = document.getElementById("note");
+          const noBtn = document.getElementById("noBtn");
+          const noDiv = document.getElementById("noDiv");
+          const message = document.getElementById("message");
+          const timer = document.getElementById("timer");
+
+          const countDownDateFormatted = new Date(date);
+          const options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          };
+          const formattedDate = countDownDateFormatted.toLocaleDateString(
+            undefined,
+            options
+          );
+
+          H1.innerText = `Will you have dinner with me on ${formattedDate}?`;
+          const isYes = localStorage.getItem("yes_clicked");
+
+          function yesClicked() {
+            localStorage.setItem("yes_clicked", "true");
+            message.style.display = "block";
+            message.style.marginTop = "0px";
+            message.style.padding = "0 20px 20px 20px";
+            noBtn.style.display = "none";
+            yesBtn.style.display = "none";
+            note.style.display = "none";
+            H1.style.display = "none";
+            timer.style.display = "block";
+            startTimer();
+          }
+
+          function noClicked() {
+            noBtn.style.display = "none";
+            note.innerText = "Told you no is not an option!";
+          }
+
+          if (isYes === "true") {
+            yesClicked();
+          }
+
+          noBtn.addEventListener("mouseover", moveButton);
+          noBtn.addEventListener("mousemove", moveButton);
+
+          yesBtn.addEventListener("click", yesClicked);
+          noDiv.addEventListener("click", noClicked);
+
+          function moveButton(event) {
+            attempts++;
+            const maxWidth = window.innerWidth - noBtn.clientWidth;
+            const maxHeight = window.innerHeight - noBtn.clientHeight;
+
+            const cursorX = event.clientX;
+            const cursorY = event.clientY;
+
+            let newTop, newLeft;
+            if (cursorX < window.innerWidth / 2) {
+              newLeft = Math.random() * (maxWidth / 2) + maxWidth / 2;
+            } else {
+              newLeft = Math.random() * (maxWidth / 2);
+            }
+
+            if (cursorY < window.innerHeight / 2) {
+              newTop = Math.random() * (maxHeight / 2) + maxHeight / 2;
+            } else {
+              newTop = Math.random() * (maxHeight / 2);
+            }
+
+            noBtn.style.top = `${newTop}px`;
+            noBtn.style.left = `${newLeft}px`;
+            if (attempts % 2 === 0) {
+              showToast(`Told you! "No" is not an option 😜`);
+            }
+          }
+
+          window.addEventListener("keydown", function (event) {
+            if (event.key === "Tab") {
+              event.preventDefault();
+            }
+            if (event.key === "x" && event.ctrlKey) {
+              localStorage.clear();
+              location.reload();
+            }
+          });
+
+          function startTimer() {
+            const countDownDate = date.getTime();
+
+            const fn = (check) => {
+              const now = new Date().getTime();
+              const distance = countDownDate - now;
+
+              const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+              const hours = Math.floor(
+                (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+              );
+              const minutes = Math.floor(
+                (distance % (1000 * 60 * 60)) / (1000 * 60)
+              );
+              const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+              timer.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+              if (distance < 0) {
+                check && clearInterval(interval);
+                timer.innerHTML = "The time for our date has arrived!";
+              }
+            };
+            fn();
+            const interval = setInterval(function () {
+              fn(true);
+            }, 1000);
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
