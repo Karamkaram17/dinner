@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dinner</title>
-    <link rel="icon" type="image/svg+xml" href="./svg.svg" />
 
     <style>
       body {
@@ -243,7 +242,7 @@
           width: 300px;
           gap: 20px;
         ">
-        <div>Choose a date</div>
+        <div>Put your day off</div>
         <div>
           <input id="date" type="date" />
         </div>
@@ -272,15 +271,16 @@
 
       function setMinDate() {
         const dateInput = document.getElementById("date");
-
-        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const today = new Date(tomorrow);
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, "0"); // Months start at 0!
         const dd = String(today.getDate()).padStart(2, "0");
         const minDate = `${yyyy}-${mm}-${dd}`;
 
         const maxDate = new Date(today);
-        maxDate.setMonth(maxDate.getMonth() + 1);
+        maxDate.setMonth(maxDate.getMonth() + 2);
         const maxYyyy = maxDate.getFullYear();
         const maxMm = String(maxDate.getMonth() + 1).padStart(2, "0");
         const maxDd = String(maxDate.getDate()).padStart(2, "0");
