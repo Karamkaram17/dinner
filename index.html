@@ -4,13 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dinner</title>
-
     <style>
       body {
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 100dvh;
         margin: 0;
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -22,6 +21,7 @@
       }
 
       .container {
+        display: none;
         text-align: center;
         background-color: rgba(255, 255, 255, 0.8);
         padding: 30px;
@@ -34,9 +34,13 @@
         max-width: 700px;
       }
 
+      #time-btn {
+        position: relative;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
       button {
         padding: 10px 20px;
-        margin: 10px;
         font-size: 18px;
         cursor: pointer;
         border: none;
@@ -45,36 +49,21 @@
         position: absolute;
       }
 
-      #yesBtn {
-        background-color: #4caf50;
-        color: white;
-        top: calc(50vh + 80px);
-        left: calc(50vw - 200px);
-      }
-
-      #yesBtn:hover {
-        background-color: #45a049;
-        transform: scale(1.1);
-      }
-
-      #noBtn {
-        color: white;
-        padding: 50px;
-        background-color: transparent;
-        top: calc(50vh + 30px);
-        left: calc(50vw + 80px);
-        cursor: default;
-      }
-
-      #noBtn div {
-        background-color: #f44336;
-        padding: 10px 20px;
-        border-radius: 5px;
+      #ball {
+        display: none;
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background-color: red;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 50%;
+        z-index: 100;
+        left: calc(50% - 25px);
+        top: calc(100% - 70px);
       }
 
       .message {
-        display: none;
-        margin-top: 20px;
+        margin: 20px;
         font-size: 24px;
         color: #333;
       }
@@ -89,24 +78,6 @@
         font-size: 18px;
         color: white;
         animation: gradientColorChange 5s linear infinite;
-      }
-
-      @keyframes gradientColorChange {
-        0% {
-          color: #432e69;
-        }
-        25% {
-          color: #f02e2e;
-        }
-        50% {
-          color: #d470f3;
-        }
-        75% {
-          color: #4caf50;
-        }
-        100% {
-          color: #2196f3;
-        }
       }
 
       #toast-container {
@@ -137,11 +108,43 @@
         background-color: #ff4321;
         color: #ebebeb;
       }
+
       .zoominout {
         margin-left: 10px;
         display: inline-block;
         animation: zoominout 2s infinite;
         transform: scale(1.5);
+      }
+
+      input[type="date"] {
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        color: #333;
+        outline: none;
+        transition: border-color 0.3s ease;
+      }
+
+      input[type="date"]:focus {
+        border-color: #4caf50;
+      }
+
+      input[type="date"]::before {
+        content: attr(placeholder);
+        color: #aaa;
+        margin-right: 10px;
+      }
+
+      input[type="date"]:focus::before,
+      input[type="date"]:valid::before {
+        content: "";
+      }
+
+      #time-btn:hover,
+      #confirm:hover {
+        transform: scale(1.1);
       }
 
       @keyframes zoominout {
@@ -176,62 +179,101 @@
           transform: translateY(-50px);
         }
       }
-      input[type="date"] {
-        padding: 10px;
-        font-size: 16px;
-        border: 2px solid #ccc;
+
+      @keyframes gradientColorChange {
+        0% {
+          color: #432e69;
+        }
+        25% {
+          color: #f02e2e;
+        }
+        50% {
+          color: #d470f3;
+        }
+        75% {
+          color: #4caf50;
+        }
+        100% {
+          color: #2196f3;
+        }
+      }
+
+      #yesBtn {
+        background-color: #4caf50;
+        color: white;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      #noBtn {
+        color: white;
+        padding: 50px;
+        background-color: transparent;
+
+        cursor: default;
+      }
+
+      #noBtn div {
+        background-color: #f44336;
+        padding: 10px 20px;
         border-radius: 5px;
-        background-color: #fff;
-        color: #333;
-        outline: none;
-        transition: border-color 0.3s ease;
       }
 
-      input[type="date"]:focus {
-        border-color: #4caf50;
+      .pc-yes {
+        top: calc(50dvh + 100px);
+        left: calc(50dvw - 200px);
       }
 
-      input[type="date"]::before {
-        content: attr(placeholder);
-        color: #aaa;
-        margin-right: 10px;
-      }
-
-      input[type="date"]:focus::before,
-      input[type="date"]:valid::before {
-        content: "";
-      }
-
-      #confirm:hover {
+      .pc-yes:hover {
+        background-color: #45a049;
         transform: scale(1.1);
+      }
+
+      .pc-no {
+        top: calc(50dvh + 50px);
+        left: calc(50dvw + 80px);
+      }
+
+      .mobile-yes {
+        top: calc(50dvh + 200px);
+        left: calc(50dvw - 130px);
+      }
+
+      .mobile-no {
+        top: calc(50dvh + 170px);
+        left: calc(50dvw - 0px);
+        padding: 30px !important;
+      }
+
+      @media only screen and (orientation: landscape) {
+        .mobile-yes {
+          top: calc(100dvh - 80px);
+          left: calc(20dvw);
+        }
+
+        .mobile-no {
+          top: calc(100dvh - 110px);
+          left: calc(100dvw - 300px);
+          padding: 30px !important;
+        }
       }
     </style>
   </head>
   <body>
+    <div id="ball"></div>
     <div id="toast-container"></div>
-    <div class="container" id="container">
-      <h1 id="H1"></h1>
-      <button
-        id="yesBtn"
-        style="
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-        ">
-        Yes
-        <img width="20px" height="20px" src="./svg.svg" alt="" />
-      </button>
+    <div class="container" id="question">
+      <h1 id="question-h1"></h1>
+      <div id="note">P.S.: You cannot choose "No" 😜</div>
+      <button id="yesBtn">Yes</button>
       <button id="noBtn">
         <div id="noDiv">No</div>
       </button>
-      <div class="message" id="message">
-        Can't wait for our dinner! <span class="zoominout">💖</span>
-      </div>
-      <div class="timer" id="timer"></div>
-      <div id="note">P.S.: You cannot press "No" 😜</div>
     </div>
-    <div class="container" id="container2">
+    <div class="container" id="time">
       <h1
         id="H1"
         style="
@@ -242,37 +284,355 @@
           width: 300px;
           gap: 20px;
         ">
-        <div>Put your day off</div>
+        <div>Choose Alternative Day</div>
         <div>
-          <input id="date" type="date" />
+          <input id="date-input" type="date" />
         </div>
         <div>
-          <button id="confirm" style="position: relative">Next</button>
+          <button id="confirm-btn" style="position: relative">Next</button>
         </div>
       </h1>
     </div>
+    <div class="container" id="result">
+      <div class="message" id="message">
+        Can't wait for our dinner! <span class="zoominout">💖</span>
+      </div>
+      <div class="timer" id="timer"></div>
+    </div>
+
     <script>
+      const timeSection = document.getElementById("time");
+      const resultSection = document.getElementById("result");
       const mainToast = document.getElementById("toast-container");
+      const questionSection = document.getElementById("question");
+      const ball = document.getElementById("ball");
+      let date = new Date();
+      let attempts = 0;
+      let touches = 0;
 
-      function showToast(message, state, duration) {
-        const toast = document.createElement("div");
-        toast.className = `toast ${
-          !state || state === "success" ? "t-green" : "t-red"
-        }`;
-        toast.innerText = message;
-        mainToast.appendChild(toast);
-        toast.style.display = "block";
+      start();
 
-        setTimeout(() => {
-          toast.style.display = "none";
-          mainToast.removeChild(toast);
-        }, duration || 1000);
+      window.addEventListener("keydown", function (event) {
+        if (event.key === "Tab") {
+          event.preventDefault();
+        }
+        if (event.key === "x" && event.ctrlKey) {
+          localStorage.clear();
+          location.reload();
+        }
+      });
+
+      window.addEventListener("touchstart", function (event) {
+        touches++;
+        if (touches > 10) {
+          localStorage.clear();
+          location.reload();
+        }
+        setInterval(() => {
+          touches = 0;
+        }, 3000);
+      });
+
+      function start() {
+        let dateString = "2024-08-08";
+        const device = detectDevice();
+        const dateLocalStorage = localStorage.getItem("selected-date");
+        const isYesClickedSaved = localStorage.getItem("yes_clicked");
+
+        try {
+          if (dateLocalStorage && JSON.parse(dateLocalStorage)) {
+            dateString = JSON.parse(dateLocalStorage);
+          }
+        } catch (error) {}
+
+        const stringDate = returnFormattedDate(new Date(dateString));
+
+        startShared(stringDate);
+
+        const yesBtn = document.getElementById("yesBtn");
+        const noBtn = document.getElementById("noBtn");
+        if (device === "Android" || device === "iOS") {
+          ball.style.display = "block";
+          ball.addEventListener("mousedown", startDrag);
+          ball.addEventListener("touchstart", startDrag);
+          noBtn.classList.add("mobile-no");
+          yesBtn.classList.add("mobile-yes");
+          preventZoomAndScroll();
+        } else {
+          noBtn.addEventListener("mouseover", moveNoButton);
+          noBtn.addEventListener("mousemove", moveNoButton);
+          noBtn.classList.add("pc-no");
+          yesBtn.classList.add("pc-yes");
+          yesBtn.addEventListener("click", onYesClick);
+        }
+
+        if (isYesClickedSaved === "true") {
+          onYesClick();
+        }
+      }
+
+      function startShared(stringDate) {
+        questionSection.style.display = "block";
+        const questionH1 = document.getElementById("question-h1");
+
+        questionH1.innerHTML = `Will you have dinner with me on ${stringDate}? <button id="time-btn">Change Day</button>`;
+        //questionH1.innerHTML = ` hqwjhkfe hwefke fjhk e fjhkee fewke f${stringDate}? <button id="time-btn">Change Day</button>`;
+        const changeTime = document.getElementById("time-btn");
+        changeTime && changeTime.addEventListener("click", openTimeSection);
+      }
+
+      function moveNoButton(event) {
+        attempts++;
+        const maxWidth = window.innerWidth - noBtn.clientWidth;
+        const maxHeight = window.innerHeight - noBtn.clientHeight;
+
+        const cursorX = event.clientX;
+        const cursorY = event.clientY;
+
+        let newTop, newLeft;
+        if (cursorX < window.innerWidth / 2) {
+          newLeft = Math.random() * (maxWidth / 2) + maxWidth / 2;
+        } else {
+          newLeft = Math.random() * (maxWidth / 2);
+        }
+
+        if (cursorY < window.innerHeight / 2) {
+          newTop = Math.random() * (maxHeight / 2) + maxHeight / 2;
+        } else {
+          newTop = Math.random() * (maxHeight / 2);
+        }
+
+        noBtn.style.top = `${newTop}px`;
+        noBtn.style.left = `${newLeft}px`;
+        if (attempts % 2 === 0) {
+          showToast(`Told you! "No" is not an option 😜`);
+        }
+      }
+
+      function startDrag(event) {
+        const touchMove = event.type === "touchstart";
+        const initialX =
+          (touchMove ? event.touches[0].clientX : event.clientX) -
+          ball.offsetLeft;
+        const initialY =
+          (touchMove ? event.touches[0].clientY : event.clientY) -
+          ball.offsetTop;
+
+        document.addEventListener(
+          touchMove ? "touchmove" : "mousemove",
+          onMove
+        );
+        document.addEventListener(touchMove ? "touchend" : "mouseup", onEnd);
+
+        function onMove(event) {
+          const x =
+            (touchMove ? event.touches[0].clientX : event.clientX) - initialX;
+          const y =
+            (touchMove ? event.touches[0].clientY : event.clientY) - initialY;
+
+          if (x < window.innerWidth - 30 && x > 0) {
+            ball.style.left = `${x}px`;
+          }
+
+          if (y < window.innerHeight - 30 && y > 0) {
+            ball.style.top = `${y}px`;
+          }
+
+          const ballRect = ball.getBoundingClientRect();
+          const noRect = noBtn.getBoundingClientRect();
+
+          const proximity = 0;
+
+          if (
+            ballRect.left < noRect.right + proximity &&
+            ballRect.right > noRect.left - proximity &&
+            ballRect.top < noRect.bottom + proximity &&
+            ballRect.bottom > noRect.top - proximity
+          ) {
+            const maxWidth = window.innerWidth - noBtn.clientWidth;
+            const maxHeight = window.innerHeight - noBtn.clientHeight;
+
+            let newTop = Math.random() * maxHeight;
+            let newLeft = Math.random() * maxWidth;
+
+            noBtn.style.top = `${newTop}px`;
+            noBtn.style.left = `${newLeft}px`;
+            showToast(`Told you! "No" is not an option 😜`);
+          }
+        }
+
+        function onEnd() {
+          document.removeEventListener(
+            touchMove ? "touchmove" : "mousemove",
+            onMove
+          );
+          document.removeEventListener(
+            touchMove ? "touchend" : "mouseup",
+            onEnd
+          );
+          const yesTarget = document.getElementById("yesBtn");
+
+          const ballRect = ball.getBoundingClientRect();
+          const yesRect = yesTarget.getBoundingClientRect();
+
+          if (
+            ballRect.left < yesRect.right &&
+            ballRect.right > yesRect.left &&
+            ballRect.top < yesRect.bottom &&
+            ballRect.bottom > yesRect.top
+          ) {
+            onYesClick();
+          } else {
+            noBtn.style.left = "calc(50% - 60px)";
+            noBtn.style.top = "calc(10% - 25px)";
+            ball.style.left = "calc(50% - 25px)";
+            ball.style.top = "calc(100% - 70px)";
+          }
+        }
+      }
+
+      function preventZoomAndScroll() {
+        // Prevent zooming
+        document.addEventListener(
+          "touchstart",
+          function (event) {
+            if (event.touches.length > 1) {
+              event.preventDefault();
+            }
+          },
+          { passive: false }
+        );
+
+        document.addEventListener(
+          "touchmove",
+          function (event) {
+            if (event.scale !== 1) {
+              event.preventDefault();
+            }
+          },
+          { passive: false }
+        );
+
+        // Prevent double-tap zoom
+        let lastTouchEnd = 0;
+        document.addEventListener(
+          "touchend",
+          function (event) {
+            const now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+              event.preventDefault();
+            }
+            lastTouchEnd = now;
+          },
+          false
+        );
+
+        document.addEventListener(
+          "touchmove",
+          function (event) {
+            if (event.target !== ball) {
+              event.preventDefault();
+            }
+          },
+          { passive: false }
+        );
+      }
+
+      function onYesClick() {
+        localStorage.setItem("yes_clicked", "true");
+        questionSection.style.display = "none";
+        resultSection.style.display = "block";
+        ball.style.display = "none";
+        showTimerSection();
+      }
+
+      function openTimeSection() {
+        timeSection.style.display = "block";
+        setMinDate();
+        questionSection.style.display = "none";
+        resultSection.style.display = "none";
+        ball.style.display = "none";
+
+        const confirmBtn = document.getElementById("confirm-btn");
+        confirmBtn.addEventListener("click", setDate);
+      }
+
+      function showTimerSection() {
+        const countDownDate = date.getTime();
+        const timer = document.getElementById("timer");
+
+        const refreshTime = (check) => {
+          const now = new Date().getTime();
+          const distance = countDownDate - now;
+
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          timer.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+
+          if (distance < 0) {
+            check && clearInterval(interval);
+            timer.innerHTML = "The time for our date has arrived!";
+          }
+        };
+        refreshTime();
+        const interval = setInterval(function () {
+          refreshTime(true);
+        }, 1000);
+      }
+
+      function returnFormattedDate(originalDate) {
+        date = new Date(
+          `${originalDate.getFullYear()}-${
+            originalDate.getMonth() + 1
+          }-${originalDate.getDate()} 20:00`
+        );
+
+        const countDownDateFormatted = new Date(date);
+        const options = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        };
+        const stringDate = countDownDateFormatted.toLocaleDateString(
+          undefined,
+          options
+        );
+
+        return stringDate;
+      }
+
+      function setDate() {
+        const dateInput = document.getElementById("date-input");
+
+        if (dateInput.value) {
+          questionSection.style.display = "block";
+          resultSection.style.display = "none";
+          timeSection.style.display = "none";
+          localStorage.setItem(
+            "selected-date",
+            JSON.stringify(dateInput.value)
+          );
+          location.reload();
+        } else {
+          showToast("Select a date!", "error", 2000);
+        }
       }
 
       function setMinDate() {
-        const dateInput = document.getElementById("date");
+        const dateInput = document.getElementById("date-input");
         const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
+        const isAfter6PM = tomorrow.getHours() > 18;
+        tomorrow.setDate(tomorrow.getDate() + (isAfter6PM ? 1 : 0));
         const today = new Date(tomorrow);
         const yyyy = today.getFullYear();
         const mm = String(today.getMonth() + 1).padStart(2, "0"); // Months start at 0!
@@ -311,175 +671,19 @@
         return "Unknown";
       }
 
-      const device = detectDevice();
-      const cont = document.getElementById("container");
-      const cont2 = document.getElementById("container2");
+      function showToast(message, state, duration) {
+        const toast = document.createElement("div");
+        toast.className = `toast ${
+          !state || state === "success" ? "t-green" : "t-red"
+        }`;
+        toast.innerText = message;
+        mainToast.appendChild(toast);
+        toast.style.display = "block";
 
-      if (device === "Android" || device === "iOS") {
-        cont.innerHTML = `<h1>Open the page on a laptop or desktop!</h1>`;
-        cont2.style.display = "none";
-      } else {
-        setTime();
-      }
-
-      function setTime() {
-        const date = localStorage.getItem("date");
-        const dateinput = document.getElementById("date");
-        const confirm = document.getElementById("confirm");
-        if (date && JSON.parse(date)) {
-          proceed(JSON.parse(date));
-        } else {
-          cont.style.display = "none";
-          cont2.style.display = "block";
-          setMinDate();
-          confirm.addEventListener("click", () => {
-            if (dateinput.value) {
-              localStorage.setItem("date", JSON.stringify(dateinput.value));
-              location.reload();
-            } else {
-              showToast("Select a date!", "error", 2000);
-            }
-          });
-        }
-      }
-
-      function proceed(date_e) {
-        cont.style.display = "block";
-        cont2.style.display = "none";
-        const d = new Date(date_e);
-
-        function getQueryParameter(name) {
-          const params = new URLSearchParams(window.location.search);
-          return params.get(name);
-        }
-
-        const date = new Date(
-          `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()} 20:00`
-        );
-
-        let attempts = 0;
-
-        document.addEventListener("DOMContentLoaded", function () {
-          const yesBtn = document.getElementById("yesBtn");
-          const H1 = document.getElementById("H1");
-          const note = document.getElementById("note");
-          const noBtn = document.getElementById("noBtn");
-          const noDiv = document.getElementById("noDiv");
-          const message = document.getElementById("message");
-          const timer = document.getElementById("timer");
-
-          const countDownDateFormatted = new Date(date);
-          const options = {
-            weekday: "long",
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          };
-          const formattedDate = countDownDateFormatted.toLocaleDateString(
-            undefined,
-            options
-          );
-
-          H1.innerText = `Will you have dinner with me on ${formattedDate}?`;
-          const isYes = localStorage.getItem("yes_clicked");
-
-          function yesClicked() {
-            localStorage.setItem("yes_clicked", "true");
-            message.style.display = "block";
-            message.style.marginTop = "0px";
-            message.style.padding = "0 20px 20px 20px";
-            noBtn.style.display = "none";
-            yesBtn.style.display = "none";
-            note.style.display = "none";
-            H1.style.display = "none";
-            timer.style.display = "block";
-            startTimer();
-          }
-
-          function noClicked() {
-            noBtn.style.display = "none";
-            note.innerText = "Told you no is not an option!";
-          }
-
-          if (isYes === "true") {
-            yesClicked();
-          }
-
-          noBtn.addEventListener("mouseover", moveButton);
-          noBtn.addEventListener("mousemove", moveButton);
-
-          yesBtn.addEventListener("click", yesClicked);
-          noDiv.addEventListener("click", noClicked);
-
-          function moveButton(event) {
-            attempts++;
-            const maxWidth = window.innerWidth - noBtn.clientWidth;
-            const maxHeight = window.innerHeight - noBtn.clientHeight;
-
-            const cursorX = event.clientX;
-            const cursorY = event.clientY;
-
-            let newTop, newLeft;
-            if (cursorX < window.innerWidth / 2) {
-              newLeft = Math.random() * (maxWidth / 2) + maxWidth / 2;
-            } else {
-              newLeft = Math.random() * (maxWidth / 2);
-            }
-
-            if (cursorY < window.innerHeight / 2) {
-              newTop = Math.random() * (maxHeight / 2) + maxHeight / 2;
-            } else {
-              newTop = Math.random() * (maxHeight / 2);
-            }
-
-            noBtn.style.top = `${newTop}px`;
-            noBtn.style.left = `${newLeft}px`;
-            if (attempts % 2 === 0) {
-              showToast(`Told you! "No" is not an option 😜`);
-            }
-          }
-
-          window.addEventListener("keydown", function (event) {
-            if (event.key === "Tab") {
-              event.preventDefault();
-            }
-            if (event.key === "x" && event.ctrlKey) {
-              localStorage.clear();
-              location.reload();
-            }
-          });
-
-          function startTimer() {
-            const countDownDate = date.getTime();
-
-            const fn = (check) => {
-              const now = new Date().getTime();
-              const distance = countDownDate - now;
-
-              const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-              const hours = Math.floor(
-                (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-              );
-              const minutes = Math.floor(
-                (distance % (1000 * 60 * 60)) / (1000 * 60)
-              );
-              const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-              timer.innerHTML = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-
-              if (distance < 0) {
-                check && clearInterval(interval);
-                timer.innerHTML = "The time for our date has arrived!";
-              }
-            };
-            fn();
-            const interval = setInterval(function () {
-              fn(true);
-            }, 1000);
-          }
-        });
+        setTimeout(() => {
+          toast.style.display = "none";
+          mainToast.removeChild(toast);
+        }, duration || 1000);
       }
     </script>
   </body>
