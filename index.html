@@ -286,7 +286,11 @@
         ">
         <div>Choose Alternative Day</div>
         <div>
-          <input id="date-input" type="date" />
+          <input
+            id="date-input"
+            type="date"
+            placeholder="YYYY-MM-DD"
+            pattern="\d{4}-\d{2}-\d{2}" />
         </div>
         <div>
           <button id="confirm-btn" style="position: relative">Next</button>
@@ -334,18 +338,23 @@
       });
 
       function start() {
-        let dateString = "2024-08-08";
+        let m = 8;
+        let d = 8;
         const device = detectDevice();
-        const dateLocalStorage = localStorage.getItem("selected-date");
-        const isYesClickedSaved = localStorage.getItem("yes_clicked");
+        const mLocalStorage = localStorage.getItem("selected-m");
+        const dLocalStorage = localStorage.getItem("selected-d");
+        const isYesClickedSaved = localStorage.getItem("yes_clicked22");
 
         try {
-          if (dateLocalStorage && JSON.parse(dateLocalStorage)) {
-            dateString = JSON.parse(dateLocalStorage);
+          if (mLocalStorage && dLocalStorage) {
+            m = Number(mLocalStorage);
+            d = Number(dLocalStorage);
           }
-        } catch (error) {}
+        } catch (error) {
+          console.log(error);
+        }
 
-        const stringDate = returnFormattedDate(new Date(dateString));
+        const stringDate = returnFormattedDate(new Date(2024, m - 1, d, 20));
 
         startShared(stringDate);
 
@@ -376,7 +385,6 @@
         const questionH1 = document.getElementById("question-h1");
 
         questionH1.innerHTML = `Will you have dinner with me on ${stringDate}? <button id="time-btn">Change Day</button>`;
-        //questionH1.innerHTML = ` hqwjhkfe hwefke fjhk e fjhkee fewke f${stringDate}? <button id="time-btn">Change Day</button>`;
         const changeTime = document.getElementById("time-btn");
         changeTime && changeTime.addEventListener("click", openTimeSection);
       }
@@ -539,7 +547,7 @@
       }
 
       function onYesClick() {
-        localStorage.setItem("yes_clicked", "true");
+        localStorage.setItem("yes_clicked22", "true");
         questionSection.style.display = "none";
         resultSection.style.display = "block";
         ball.style.display = "none";
@@ -589,9 +597,10 @@
 
       function returnFormattedDate(originalDate) {
         date = new Date(
-          `${originalDate.getFullYear()}-${
-            originalDate.getMonth() + 1
-          }-${originalDate.getDate()} 20:00`
+          originalDate.getFullYear(),
+          originalDate.getMonth(),
+          originalDate.getDate(),
+          20
         );
 
         const countDownDateFormatted = new Date(date);
@@ -618,10 +627,9 @@
           questionSection.style.display = "block";
           resultSection.style.display = "none";
           timeSection.style.display = "none";
-          localStorage.setItem(
-            "selected-date",
-            JSON.stringify(dateInput.value)
-          );
+          const parts = dateInput.value.split("-");
+          localStorage.setItem("selected-m", parts[1]);
+          localStorage.setItem("selected-d", parts[2]);
           location.reload();
         } else {
           showToast("Select a date!", "error", 2000);
