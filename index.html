@@ -341,9 +341,9 @@
         let m = 8;
         let d = 8;
         const device = detectDevice();
-        const mLocalStorage = localStorage.getItem("selected-m");
-        const dLocalStorage = localStorage.getItem("selected-d");
-        const isYesClickedSaved = localStorage.getItem("yes_clicked22");
+        const mLocalStorage = localStorage.getItem("selected-m2");
+        const dLocalStorage = localStorage.getItem("selected-d2");
+        const isYesClickedSaved = localStorage.getItem("yes_clicked222");
 
         try {
           if (mLocalStorage && dLocalStorage) {
@@ -547,7 +547,7 @@
       }
 
       function onYesClick() {
-        localStorage.setItem("yes_clicked22", "true");
+        localStorage.setItem("yes_clicked222", "true");
         questionSection.style.display = "none";
         resultSection.style.display = "block";
         ball.style.display = "none";
@@ -628,8 +628,8 @@
           resultSection.style.display = "none";
           timeSection.style.display = "none";
           const parts = dateInput.value.split("-");
-          localStorage.setItem("selected-m", parts[1]);
-          localStorage.setItem("selected-d", parts[2]);
+          localStorage.setItem("selected-m2", parts[1]);
+          localStorage.setItem("selected-d2", parts[2]);
           location.reload();
         } else {
           showToast("Select a date!", "error", 2000);
