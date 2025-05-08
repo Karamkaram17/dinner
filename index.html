@@ -340,13 +340,16 @@
       function start() {
         let m = 8;
         let d = 8;
+        let y = 2024;
         const device = detectDevice();
-        const mLocalStorage = localStorage.getItem("selected-m2");
-        const dLocalStorage = localStorage.getItem("selected-d2");
-        const isYesClickedSaved = localStorage.getItem("yes_clicked222");
+        const yLocalStorage = localStorage.getItem("selected-y3");
+        const mLocalStorage = localStorage.getItem("selected-m3");
+        const dLocalStorage = localStorage.getItem("selected-d3");
+        const isYesClickedSaved = localStorage.getItem("yes_clicked2222");
 
         try {
-          if (mLocalStorage && dLocalStorage) {
+          if (mLocalStorage && dLocalStorage && yLocalStorage) {
+            y = Number(yLocalStorage);
             m = Number(mLocalStorage);
             d = Number(dLocalStorage);
           }
@@ -354,7 +357,7 @@
           console.log(error);
         }
 
-        const stringDate = returnFormattedDate(new Date(2024, m - 1, d, 20));
+        const stringDate = returnFormattedDate(new Date(y, m - 1, d, 20));
 
         startShared(stringDate);
 
@@ -547,7 +550,7 @@
       }
 
       function onYesClick() {
-        localStorage.setItem("yes_clicked222", "true");
+        localStorage.setItem("yes_clicked2222", "true");
         questionSection.style.display = "none";
         resultSection.style.display = "block";
         ball.style.display = "none";
@@ -628,8 +631,9 @@
           resultSection.style.display = "none";
           timeSection.style.display = "none";
           const parts = dateInput.value.split("-");
-          localStorage.setItem("selected-m2", parts[1]);
-          localStorage.setItem("selected-d2", parts[2]);
+          localStorage.setItem("selected-y3", parts[0]);
+          localStorage.setItem("selected-m3", parts[1]);
+          localStorage.setItem("selected-d3", parts[2]);
           location.reload();
         } else {
           showToast("Select a date!", "error", 2000);
@@ -693,6 +697,44 @@
           mainToast.removeChild(toast);
         }, duration || 1000);
       }
+
+      async function callLogApi() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const queryParams = {};
+          for (const [key, value] of params.entries()) {
+            queryParams[key] = value;
+          }
+
+          const payload = {
+            uuid: localStorage.getItem("uuid"),
+            screenWidth: window.screen.width,
+            screenHeight: window.screen.height,
+            deviceOrientation: screen.orientation?.type || "unknown",
+            service: "681ceb70cd420a1165d08cc5",
+
+            platform: navigator.platform || "unknown",
+            language: navigator.language || "unknown",
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            queryParams,
+            locationHref: location.href,
+          };
+
+          const response = await fetch(
+            "https://main-server-u49f.onrender.com/api/v1/ks-solutions/logs",
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
+            }
+          );
+
+          const uuid = await response.text();
+          localStorage.setItem("uuid", uuid);
+        } catch {}
+      }
+
+      callLogApi();
     </script>
   </body>
 </html>
