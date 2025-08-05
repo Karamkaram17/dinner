@@ -1,0 +1,214 @@
+{
+	"root": true,
+	"ignorePatterns": ["projects/**/*"],
+	"overrides": [
+		{
+			"files": ["*.ts"],
+			"extends": [
+				"eslint:recommended",
+				"plugin:import/recommended",
+				"plugin:@typescript-eslint/recommended",
+				"plugin:@angular-eslint/recommended",
+				"plugin:@angular-eslint/template/process-inline-templates"
+			],
+			"plugins": ["unused-imports"],
+			"rules": {
+				"@angular-eslint/prefer-output-readonly": "error",
+				"@angular-eslint/use-component-selector": "error",
+				"import/named": "off",
+				"import/no-unresolved": "off",
+				"import/no-duplicates": [
+					"error",
+					{ "considerQueryString": true }
+				],
+				"unused-imports/no-unused-imports": "error",
+				"unused-imports/no-unused-vars": [
+					"warn",
+					{
+						"vars": "all",
+						"args": "after-used",
+						"ignoreRestSiblings": false
+					}
+				],
+				"import/order": [
+					"error",
+					{
+						"groups": [
+							["builtin", "external", "internal"],
+							["parent", "sibling", "index"]
+						],
+						"newlines-between": "always",
+						"alphabetize": {
+							"order": "asc",
+							"caseInsensitive": true
+						}
+					}
+				],
+				"padding-line-between-statements": [
+					"error",
+					{
+						"blankLine": "always",
+						"prev": "*",
+						"next": ["for", "while", "export", "if", "return"]
+					},
+					{
+						"blankLine": "always",
+						"prev": ["for", "while", "export", "if", "return"],
+						"next": "*"
+					},
+					{
+						"blankLine": "always",
+						"prev": ["const", "let", "var"],
+						"next": "multiline-expression"
+					},
+					{
+						"blankLine": "always",
+						"prev": "multiline-expression",
+						"next": "*"
+					},
+					{
+						"blankLine": "always",
+						"prev": "export",
+						"next": "*"
+					},
+					{
+						"blankLine": "never",
+						"prev": "export",
+						"next": "export"
+					},
+					{
+						"blankLine": "never",
+						"prev": "case",
+						"next": "case"
+					},
+					{
+						"blankLine": "never",
+						"prev": "const",
+						"next": "const"
+					}
+				],
+				"max-len": [
+					"error",
+					{
+						"code": 150,
+						"ignoreUrls": true,
+						"ignorePattern": "^import .*",
+						"ignoreStrings": true,
+						"ignoreTemplateLiterals": true
+					}
+				],
+				"@angular-eslint/contextual-lifecycle": ["error"],
+				"@angular-eslint/no-async-lifecycle-method": ["error"],
+				"@angular-eslint/no-conflicting-lifecycle": ["error"],
+				"@angular-eslint/no-lifecycle-call": ["error"],
+				"@angular-eslint/prefer-standalone": ["error"],
+				"@angular-eslint/prefer-on-push-component-change-detection": [
+					"error"
+				],
+				"@typescript-eslint/no-unused-expressions": [
+					"error",
+					{
+						"allowShortCircuit": true
+					}
+				],
+				"@typescript-eslint/no-explicit-any": "off",
+				"@typescript-eslint/explicit-function-return-type": [
+					"error",
+					{ "allowExpressions": true }
+				],
+				"@typescript-eslint/no-unused-vars": [
+					"error",
+					{
+						"vars": "all",
+						"args": "after-used",
+						"caughtErrorsIgnorePattern": "^_",
+						"ignoreRestSiblings": true,
+						"argsIgnorePattern": "^$"
+					}
+				],
+				"@typescript-eslint/explicit-member-accessibility": [
+					"error",
+					{
+						"ignoredMethodNames": [
+							"ngOnInit",
+							"ngOnChanges",
+							"ngAfterViewInit",
+							"ngDoCheck",
+							"ngAfterContentInit",
+							"ngAfterContentChecked",
+							"ngAfterViewChecked",
+							"ngOnDestroy"
+						],
+						"accessibility": "explicit",
+						"overrides": {
+							"accessors": "explicit",
+							"constructors": "no-public",
+							"methods": "explicit",
+							"properties": "explicit",
+							"parameterProperties": "explicit"
+						}
+					}
+				],
+				"no-multiple-empty-lines": [
+					"error",
+					{
+						"max": 1
+					}
+				],
+				"lines-between-class-members": [
+					"error",
+					{
+						"enforce": [
+							{
+								"blankLine": "always",
+								"prev": "*",
+								"next": "method"
+							},
+							{
+								"blankLine": "always",
+								"prev": "method",
+								"next": "*"
+							},
+							{
+								"blankLine": "always",
+								"prev": "field",
+								"next": "field"
+							}
+						]
+					},
+					{ "exceptAfterSingleLine": true }
+				],
+				"no-var": "error"
+			}
+		},
+		{
+			"files": ["src/app/shared/**/*.component.ts"],
+			"rules": {
+				"@angular-eslint/directive-selector": [
+					"error",
+					{
+						"type": "attribute",
+						"prefix": "kss-dir",
+						"style": "kebab-case"
+					}
+				],
+				"@angular-eslint/component-selector": [
+					"error",
+					{
+						"type": "element",
+						"prefix": ["kss-lib"],
+						"style": "kebab-case"
+					}
+				]
+			}
+		},
+		{
+			"files": ["*.html"],
+			"extends": [
+				"plugin:@angular-eslint/template/recommended",
+				"plugin:@angular-eslint/template/accessibility"
+			],
+			"rules": {}
+		}
+	]
+}
