@@ -384,10 +384,12 @@
         }
 
         if (isYesClickedSaved === "true") {
-          KSSActivityLogger.saveLog(
-            { msg: `Entered again with saved date ${stringDate}` },
-            "already accepted request",
-          );
+          setTimeout(() => {
+            KSSActivityLogger.saveLog(
+              { msg: `Entered again with saved date ${stringDate}` },
+              "already accepted request",
+            );
+          }, 3000);
           onYesClick();
         }
       }
