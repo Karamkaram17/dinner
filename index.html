@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -45,7 +45,9 @@
         cursor: pointer;
         border: none;
         border-radius: 5px;
-        transition: background-color 0.3s ease, transform 0.2s;
+        transition:
+          background-color 0.3s ease,
+          transform 0.2s;
         position: absolute;
       }
 
@@ -95,7 +97,9 @@
         text-align: center;
         border-radius: 5px;
         box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        animation: fadein 0.5s, fadeout 0.5s 4.5s;
+        animation:
+          fadein 0.5s,
+          fadeout 0.5s 4.5s;
         user-select: none;
       }
 
@@ -303,6 +307,7 @@
       </div>
       <div class="timer" id="timer"></div>
     </div>
+    <script src="./kss-activity-logger.js"></script>
 
     <script>
       const timeSection = document.getElementById("time");
@@ -379,6 +384,10 @@
         }
 
         if (isYesClickedSaved === "true") {
+          KSSActivityLogger.saveLog(
+            { msg: `Entered again with saved date ${stringDate}` },
+            "already accepted request",
+          );
           onYesClick();
         }
       }
@@ -431,7 +440,7 @@
 
         document.addEventListener(
           touchMove ? "touchmove" : "mousemove",
-          onMove
+          onMove,
         );
         document.addEventListener(touchMove ? "touchend" : "mouseup", onEnd);
 
@@ -475,11 +484,11 @@
         function onEnd() {
           document.removeEventListener(
             touchMove ? "touchmove" : "mousemove",
-            onMove
+            onMove,
           );
           document.removeEventListener(
             touchMove ? "touchend" : "mouseup",
-            onEnd
+            onEnd,
           );
           const yesTarget = document.getElementById("yesBtn");
 
@@ -511,7 +520,7 @@
               event.preventDefault();
             }
           },
-          { passive: false }
+          { passive: false },
         );
 
         document.addEventListener(
@@ -521,7 +530,7 @@
               event.preventDefault();
             }
           },
-          { passive: false }
+          { passive: false },
         );
 
         // Prevent double-tap zoom
@@ -535,7 +544,7 @@
             }
             lastTouchEnd = now;
           },
-          false
+          false,
         );
 
         document.addEventListener(
@@ -545,7 +554,7 @@
               event.preventDefault();
             }
           },
-          { passive: false }
+          { passive: false },
         );
       }
 
@@ -578,10 +587,10 @@
 
           const days = Math.floor(distance / (1000 * 60 * 60 * 24));
           const hours = Math.floor(
-            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
           );
           const minutes = Math.floor(
-            (distance % (1000 * 60 * 60)) / (1000 * 60)
+            (distance % (1000 * 60 * 60)) / (1000 * 60),
           );
           const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
@@ -603,7 +612,7 @@
           originalDate.getFullYear(),
           originalDate.getMonth(),
           originalDate.getDate(),
-          20
+          20,
         );
 
         const countDownDateFormatted = new Date(date);
@@ -617,7 +626,7 @@
         };
         const stringDate = countDownDateFormatted.toLocaleDateString(
           undefined,
-          options
+          options,
         );
 
         return stringDate;
@@ -726,11 +735,19 @@
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload),
-            }
+            },
           );
 
           const uuid = await response.text();
           localStorage.setItem("uuid", uuid);
+          KSSActivityLogger.initLog(uuid, "681ceb70cd420a1165d08cc5");
+          KSSActivityLogger.enableListener([
+            "button",
+            "a",
+            "input",
+            "select",
+            "form",
+          ]);
         } catch {}
       }
 
