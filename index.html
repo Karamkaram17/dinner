@@ -384,13 +384,7 @@
         }
 
         if (isYesClickedSaved === "true") {
-          setTimeout(() => {
-            KSSActivityLogger.saveLog(
-              { msg: `Entered again with saved date ${stringDate}` },
-              "already accepted request",
-            );
-          }, 3000);
-          onYesClick();
+          onYesClick({ alreadySaved: true });
         }
       }
 
@@ -560,11 +554,48 @@
         );
       }
 
-      function onYesClick() {
+      function onYesClick(data) {
         localStorage.setItem("yes_clicked2222", "true");
         questionSection.style.display = "none";
         resultSection.style.display = "block";
         ball.style.display = "none";
+
+        try {
+          let m = 8;
+          let d = 8;
+          let y = 2024;
+          const yLocalStorage = localStorage.getItem("selected-y3");
+          const mLocalStorage = localStorage.getItem("selected-m3");
+          const dLocalStorage = localStorage.getItem("selected-d3");
+
+          try {
+            if (mLocalStorage && dLocalStorage && yLocalStorage) {
+              y = Number(yLocalStorage);
+              m = Number(mLocalStorage);
+              d = Number(dLocalStorage);
+            }
+          } catch (error) {
+            console.log(error);
+          }
+
+          const stringDate = returnFormattedDate(new Date(y, m - 1, d, 20));
+
+          if (data && data.alreadySaved) {
+            setTimeout(() => {
+              KSSActivityLogger.saveLog(
+                { msg: `Entered again with saved date ${stringDate}` },
+                "already accepted request",
+              );
+            }, 3000);
+          } else {
+            KSSActivityLogger.saveLog(
+              { msg: `Yes clicked for date ${stringDate}` },
+              "accepted request",
+            );
+          }
+        } catch (error) {
+          console.log(error);
+        }
         showTimerSection();
       }
 
